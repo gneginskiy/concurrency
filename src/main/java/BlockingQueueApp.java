@@ -1,8 +1,12 @@
-package blockingqueue;
+import blockingqueue.BlockingQueue;
+import blockingqueue.CustomBlockingQueue;
 
 public class BlockingQueueApp {
+
     public static void main(String[] args) throws InterruptedException {
-        CustomBlockingQueue<Integer> queue = new CustomBlockingQueue<>(4);
+        long start = System.currentTimeMillis();
+
+        BlockingQueue<Integer> queue = new CustomBlockingQueue<>(100);
 
         Thread thread1 = new Thread(() -> {
             for (int i = 0; i < 20_000; i++) {
@@ -30,6 +34,7 @@ public class BlockingQueueApp {
         thread2.join();
         thread3.join();
 
+        System.out.println(start-System.currentTimeMillis());
         System.out.println(queue);
 
     }

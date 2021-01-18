@@ -28,7 +28,7 @@ public class CustomBlockingQueue<T> implements BlockingQueue<T> {
         size++;
 
         if (size == 1) {
-            notify();
+            notifyAll();
         }
     }
 
