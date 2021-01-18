@@ -17,9 +17,8 @@ public class BlockingQueueApp {
             System.out.println(queue);
         });
         thread2.start();
+
         thread2.join();
-
-
         thread1.join();
     }
 }
