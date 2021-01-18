@@ -15,4 +15,13 @@ public class DeferredCallbackRunner {
     public void registerTask(Duration delay, Runnable task) {
         this.executorService.schedule(task, delay.toMillis(), TimeUnit.MILLISECONDS);
     }
+
+    public void shutdown() {
+        try {
+            executorService.awaitTermination(10,TimeUnit.SECONDS);
+            executorService.shutdownNow();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
