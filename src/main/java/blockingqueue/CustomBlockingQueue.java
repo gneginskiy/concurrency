@@ -49,7 +49,7 @@ public class CustomBlockingQueue<T> implements BlockingQueue<T> {
         size--;
 
         if (size == capacity - 1) {
-            notify();
+            notifyAll();
         }
         return item;
     }
