@@ -1,4 +1,4 @@
-package deferredcallback;
+package concurrency.deferredcallback;
 
 import java.time.Duration;
 

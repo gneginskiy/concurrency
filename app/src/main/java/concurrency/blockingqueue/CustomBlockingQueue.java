@@ -1,4 +1,4 @@
-package blockingqueue;
+package concurrency.blockingqueue;
 
 import java.util.Arrays;
 
@@ -24,7 +24,7 @@ public class CustomBlockingQueue<T> implements BlockingQueue<T> {
                 e.printStackTrace();
             }
         }
-        array[tailPostIncement(tail)] = item;
+        array[tailPostIncrement(tail)] = item;
         size++;
 
         if (size == 1) {
@@ -55,7 +55,7 @@ public class CustomBlockingQueue<T> implements BlockingQueue<T> {
     }
 
 
-    private int tailPostIncement(int tail) {
+    private int tailPostIncrement(int tail) {
         this.tail = (tail + 1) % capacity;
         return tail;
     }

@@ -1,30 +1,28 @@
-package blockingqueue;
+package concurrency.blockingqueue;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
-public class JDKBlockingQueueApp {
+public class BlockingQueueApp {
 
     public static void main(String[] args) throws InterruptedException {
         long start = System.currentTimeMillis();
 
-        BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(100);
+        BlockingQueue<Integer> queue = new CustomBlockingQueue<>(100);
 
         Thread thread1 = new Thread(() -> {
             for (int i = 0; i < 20_000; i++) {
-                queue.offer(i);
+                queue.enqueue(i);
+                if (i % 100 == 0) waitForMillis(10);
             }
         });
 
         Thread thread2 = new Thread(() -> {
             for (int i = 0; i < 10_000; i++) {
-                queue.poll();
+                queue.dequeue();
             }
         });
 
         Thread thread3 = new Thread(() -> {
             for (int i = 0; i < 10_000; i++) {
-                queue.poll();
+                queue.dequeue();
             }
         });
 
@@ -36,8 +34,16 @@ public class JDKBlockingQueueApp {
         thread2.join();
         thread3.join();
 
-        System.out.println(start - System.currentTimeMillis());
+        System.out.println(System.currentTimeMillis() - start);
         System.out.println(queue);
 
+    }
+
+    private static void waitForMillis(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
