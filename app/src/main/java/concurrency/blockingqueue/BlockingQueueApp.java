@@ -7,16 +7,16 @@ public class BlockingQueueApp {
 
         BlockingQueue<Integer> queue = new CustomBlockingQueue<>(100);
 
-        Thread thread1 = new Thread(() -> {
-            for (int i = 0; i < 20_000; i++) {
-                queue.enqueue(i);
-                if (i % 100 == 0) waitForMillis(10);
-            }
-        });
 
         Thread thread2 = new Thread(() -> {
             for (int i = 0; i < 10_000; i++) {
                 queue.dequeue();
+            }
+        });
+
+        Thread thread1 = new Thread(() -> {
+            for (int i = 0; i < 20_000; i++) {
+                queue.enqueue(i);
             }
         });
 

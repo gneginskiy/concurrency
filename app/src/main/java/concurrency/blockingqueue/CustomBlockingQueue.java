@@ -1,73 +1,38 @@
 package concurrency.blockingqueue;
 
-import java.util.Arrays;
+import java.util.LinkedList;
 
 public class CustomBlockingQueue<T> implements BlockingQueue<T> {
-    volatile T[] array;
-    volatile int size = 0;
-    final int capacity;
-    volatile int head = 0;
-    volatile int tail = 0;
+    private final int capacity;
+    private final LinkedList<T> list;
 
-    @SuppressWarnings("unchecked")
     public CustomBlockingQueue(int capacity) {
-        array = (T[]) new Object[capacity];
         this.capacity = capacity;
+        this.list = new LinkedList<>();
     }
 
     @Override
     public synchronized void enqueue(T item) {
-        while (size == capacity) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        array[tailPostIncrement(tail)] = item;
-        size++;
-
-        if (size == 1) {
-            notifyAll();
-        }
+        while (list.size() == capacity) waitt();
+        list.add(item);
+        if (list.size()==1) notifyAll();
     }
+
 
     @Override
     public synchronized T dequeue() {
-        while (size == 0) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        int head = headPostIncrement(this.head);
-        T item = array[head];
-        array[head] = null;
-        size--;
-
-        if (size == capacity - 1) {
-            notifyAll();
-        }
-        return item;
+        while (list.size()==0) waitt();
+        var val = list.remove(0);
+        if (list.size()<capacity) notifyAll();
+        return val;
     }
 
-
-    private int tailPostIncrement(int tail) {
-        this.tail = (tail + 1) % capacity;
-        return tail;
+    private void waitt() {
+        try { wait(); } catch (InterruptedException e) { e.printStackTrace(); }
     }
-
-    private int headPostIncrement(int head) {
-        this.head = (this.head + 1) % capacity;
-        return head;
-    }
-
 
     @Override
     public String toString() {
-        return Arrays.asList(array).toString();
+        return list.toString();
     }
 }
